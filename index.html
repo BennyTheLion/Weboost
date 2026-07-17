@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Weboost — בונים דף נחיתה בשיחה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="workshop">
+
+    <!-- workbench: the chat -->
+    <section class="workbench">
+      <header class="workbench__header">
+        <div class="brand">
+          <span class="brand__mark">◆</span>
+          <span class="brand__name">Weboost</span>
+        </div>
+        <div class="agent-status">
+          <span class="agent-status__dot"></span>
+          <span class="agent-status__label">הסוכן מחובר</span>
+        </div>
+      </header>
+
+      <div class="chat" id="chat">
+        <div class="msg msg--agent">
+          <span class="msg__tag">סוכן</span>
+          <p>ספרו לי על העסק שעבורו בונים את הדף — במה אתם עוסקים, מי הלקוחות שלכם, ומה תרצו שהמבקרים יעשו כשהם מגיעים לדף (לקבוע שיחה, לשלוח הודעה, לבצע רכישה).</p>
+        </div>
+      </div>
+
+      <form class="composer" id="composer">
+        <textarea
+          id="input"
+          class="composer__input"
+          placeholder="לדוגמה: אני צלם/ת חתונות בתל אביב. אני רוצה שזוגות יפנו אליי לבדוק זמינות."
+          rows="2"
+        ></textarea>
+        <button type="submit" class="composer__send" id="send" aria-label="שליחה">←</button>
+      </form>
+    </section>
+
+    <!-- seam: literal ruler between workbench and canvas -->
+    <div class="seam" id="seam" aria-hidden="true">
+      <div class="seam__label">בבנייה</div>
+      <div class="seam__ruler"></div>
+    </div>
+
+    <!-- canvas: the live preview -->
+    <section class="canvas">
+      <header class="canvas__header">
+        <span class="canvas__label">תצוגה חיה</span>
+        <span class="canvas__hint" id="canvasHint">ממתין להודעה הראשונה שלכם…</span>
+      </header>
+      <div class="canvas__frame-wrap">
+        <iframe id="preview" class="canvas__frame" title="תצוגה מקדימה של דף הנחיתה שנוצר"></iframe>
+        <div class="canvas__empty" id="canvasEmpty">
+          <p>דף הנחיתה שלכם יתגבש כאן תוך כדי שיחה.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

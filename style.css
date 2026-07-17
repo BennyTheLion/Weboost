@@ -1,0 +1,353 @@
+/* ============================================================
+   TOKENS
+   ink:      #14171C  workbench background
+   paper:    #F7F5F0  canvas background
+   signal:   #FFB238  accent / CTA / active states
+   slate:    #5B6472  muted text
+   wire:     #3ECF8E  success / online indicator
+   line:     #262B33  hairline on ink
+
+   Layout uses CSS logical properties (inline-start/end, not left/right)
+   throughout so it mirrors correctly for the RTL Hebrew direction set on
+   <html dir="rtl">, without needing a separate RTL stylesheet.
+   ============================================================ */
+
+:root {
+  --ink: #14171C;
+  --ink-raised: #1B1F27;
+  --paper: #F7F5F0;
+  --paper-line: #E4E0D6;
+  --signal: #FFB238;
+  --slate: #8A93A3;
+  --slate-dark: #5B6472;
+  --wire: #3ECF8E;
+  --line: #262B33;
+  --font-display: "Frank Ruhl Libre", serif;
+  --font-body: "Heebo", sans-serif;
+  --font-label: "Heebo", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: var(--font-body);
+}
+
+body {
+  background: var(--ink);
+}
+
+.workshop {
+  display: grid;
+  /* First track = inline-start = right side under dir="rtl", which puts
+     the workbench (chat) on the right and the canvas on the left —
+     grid track placement follows direction automatically. */
+  grid-template-columns: minmax(320px, 40%) 28px 1fr;
+  height: 100vh;
+  min-height: 560px;
+}
+
+/* ---------------- WORKBENCH (chat) ---------------- */
+
+.workbench {
+  background: var(--ink);
+  color: #E7E9ED;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.workbench__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand__mark {
+  color: var(--signal);
+  font-size: 14px;
+}
+
+.brand__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: 0.01em;
+}
+
+.agent-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  color: var(--slate);
+  letter-spacing: 0.02em;
+}
+
+.agent-status__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--wire);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.15);
+}
+
+.chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.msg {
+  max-width: 92%;
+  animation: rise 0.25s ease-out;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg__tag {
+  display: block;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--slate);
+  margin-bottom: 6px;
+}
+
+.msg p {
+  margin: 0;
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+.msg--agent p {
+  color: #E7E9ED;
+}
+
+.msg--user {
+  align-self: flex-end;
+  text-align: start;
+}
+
+.msg--user .msg__tag { color: var(--signal); }
+
+.msg--user p {
+  background: var(--ink-raised);
+  border: 1px solid var(--line);
+  /* Logical corners: the "flat" corner sits at block-end/inline-end,
+     i.e. it automatically lands on the correct side (left, under RTL)
+     without needing separate LTR/RTL border-radius values. */
+  border-start-start-radius: 10px;
+  border-start-end-radius: 10px;
+  border-end-start-radius: 10px;
+  border-end-end-radius: 2px;
+  padding: 10px 13px;
+  display: inline-block;
+  text-align: start;
+  color: #F1F2F4;
+}
+
+.msg--thinking p {
+  color: var(--slate);
+  font-style: italic;
+}
+
+.composer {
+  display: flex;
+  gap: 10px;
+  padding: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.composer__input {
+  flex: 1;
+  resize: none;
+  background: var(--ink-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: #F1F2F4;
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 11px 13px;
+  line-height: 1.4;
+  text-align: start;
+}
+
+.composer__input:focus {
+  outline: 2px solid var(--signal);
+  outline-offset: 1px;
+}
+
+.composer__input::placeholder { color: var(--slate-dark); }
+
+.composer__send {
+  width: 44px;
+  border: none;
+  border-radius: 8px;
+  background: var(--signal);
+  color: #14171C;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.composer__send:hover { transform: translateY(-1px); }
+.composer__send:disabled { opacity: 0.4; cursor: default; transform: none; }
+.composer__send:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+/* ---------------- SEAM (literal ruler) ---------------- */
+
+.seam {
+  background: var(--ink);
+  /* inline-start border sits against the workbench, inline-end against
+     the canvas — this reads correctly in both directions. */
+  border-inline-start: 1px solid var(--line);
+  border-inline-end: 1px solid var(--paper-line);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seam__label {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--slate-dark);
+}
+
+.seam.is-active .seam__label { color: var(--signal); }
+
+.seam__ruler {
+  width: 1px;
+  height: 78%;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--line) 0px,
+    var(--line) 1px,
+    transparent 1px,
+    transparent 11px
+  );
+}
+
+/* ---------------- CANVAS (live preview) ---------------- */
+
+.canvas {
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.canvas__header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.canvas__label {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #B0725A;
+}
+
+.canvas__hint {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--slate-dark);
+}
+
+.canvas__frame-wrap {
+  flex: 1;
+  position: relative;
+  padding: 20px;
+}
+
+.canvas__frame {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--paper-line);
+  border-radius: 6px;
+  background: #fff;
+  display: none;
+}
+
+.canvas__frame.is-visible { display: block; }
+
+.canvas__empty {
+  position: absolute;
+  inset: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px dashed var(--paper-line);
+  border-radius: 6px;
+  color: var(--slate-dark);
+  font-family: var(--font-display);
+  font-size: 18px;
+  padding: 40px;
+}
+
+.canvas__empty.is-hidden { display: none; }
+
+/* ---------------- responsive ---------------- */
+
+@media (max-width: 860px) {
+  .workshop {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 14px minmax(320px, 1fr);
+    height: auto;
+    min-height: 100vh;
+  }
+  .seam {
+    border-inline-start: none;
+    border-top: 1px solid var(--line);
+  }
+  .seam__label { display: none; }
+  .seam__ruler {
+    width: 78%;
+    height: 1px;
+    background: repeating-linear-gradient(
+      to right,
+      var(--line) 0px, var(--line) 1px, transparent 1px, transparent 11px
+    );
+  }
+  .workbench { min-height: 400px; }
+  .canvas { min-height: 400px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msg { animation: none; }
+  .composer__send { transition: none; }
+}
