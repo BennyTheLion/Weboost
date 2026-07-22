@@ -82,7 +82,7 @@ body {
 .brand__name {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 19px;
+  font-size: 21px;
   letter-spacing: 0.01em;
 }
 
@@ -107,7 +107,7 @@ body {
 /* ---------------- STYLE PICKER ---------------- */
 /* Lets the visitor override the agent's own style judgment — the dot on
    each chip echoes that template's actual accent color so the mapping is
-   recognizable at a glance (terracotta/acid-green/muted grey). */
+   recognizable at a glance (brass/cobalt/muted grey/navy/gold/coral/...). */
 
 .style-picker {
   display: flex;
@@ -149,9 +149,9 @@ body {
   flex: 0 0 auto;
 }
 
-.style-chip__dot--auto { background: conic-gradient(var(--signal), #C1633F, #D6FF3F, #7A7A76, var(--signal)); }
-.style-chip__dot--warm { background: #C1633F; }
-.style-chip__dot--bold { background: #D6FF3F; }
+.style-chip__dot--auto { background: conic-gradient(var(--signal), #C89B3C, #1E3FD6, #7A7A76, var(--signal)); }
+.style-chip__dot--warm { background: #C89B3C; }
+.style-chip__dot--bold { background: #1E3FD6; }
 .style-chip__dot--minimal { background: #7A7A76; }
 .style-chip__dot--modern-corporate { background: #2F6FED; }
 .style-chip__dot--luxury { background: #C9A961; }
@@ -292,25 +292,50 @@ body {
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
-  font-family: var(--font-label);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   color: var(--slate-dark);
+  transition: color 0.2s ease;
 }
 
 .seam.is-active .seam__label { color: var(--signal); }
 
+/* A real ruler, not a dashed line: a tiled SVG tick pattern (a long tick
+   every 40px, short ticks every 10px between) running down a center
+   spine. When a page is being built, a second copy of the same pattern
+   in --signal fades in and pulses over it — the ruler doing double duty
+   as the "in progress" indicator, tying directly to the workshop/
+   drafting-table idea instead of a generic spinner. */
 .seam__ruler {
-  width: 1px;
+  position: relative;
+  width: 14px;
   height: 78%;
-  background: repeating-linear-gradient(
-    to bottom,
-    var(--line) 0px,
-    var(--line) 1px,
-    transparent 1px,
-    transparent 11px
-  );
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='40' viewBox='0 0 14 40'%3E%3Cline x1='7' y1='0' x2='7' y2='40' stroke='%23262B33' stroke-width='1'/%3E%3Cline x1='1' y1='0' x2='13' y2='0' stroke='%23262B33' stroke-width='1'/%3E%3Cline x1='4' y1='10' x2='10' y2='10' stroke='%23262B33' stroke-width='1'/%3E%3Cline x1='4' y1='20' x2='10' y2='20' stroke='%23262B33' stroke-width='1'/%3E%3Cline x1='4' y1='30' x2='10' y2='30' stroke='%23262B33' stroke-width='1'/%3E%3C/svg%3E");
+  background-repeat: repeat-y;
+  background-position: top center;
+}
+
+.seam__ruler::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='40' viewBox='0 0 14 40'%3E%3Cline x1='7' y1='0' x2='7' y2='40' stroke='%23FFB238' stroke-width='1'/%3E%3Cline x1='1' y1='0' x2='13' y2='0' stroke='%23FFB238' stroke-width='1'/%3E%3Cline x1='4' y1='10' x2='10' y2='10' stroke='%23FFB238' stroke-width='1'/%3E%3Cline x1='4' y1='20' x2='10' y2='20' stroke='%23FFB238' stroke-width='1'/%3E%3Cline x1='4' y1='30' x2='10' y2='30' stroke='%23FFB238' stroke-width='1'/%3E%3C/svg%3E");
+  background-repeat: repeat-y;
+  background-position: top center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.seam.is-active .seam__ruler::after {
+  opacity: 1;
+  animation: ruler-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes ruler-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
 }
 
 /* ---------------- CANVAS (live preview) ---------------- */
@@ -331,11 +356,11 @@ body {
 }
 
 .canvas__label {
-  font-family: var(--font-label);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: #B0725A;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--signal);
 }
 
 .canvas__hint {
@@ -376,6 +401,32 @@ body {
   padding: 40px;
 }
 
+/* Registration marks on two opposite corners — a drafting-table/viewfinder
+   cue that this is a frame waiting to be filled, rather than a plain
+   empty box. */
+.canvas__empty::before,
+.canvas__empty::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.canvas__empty::before {
+  top: 16px;
+  inset-inline-start: 16px;
+  border-inline-start: 1.5px solid var(--paper-line);
+  border-top: 1.5px solid var(--paper-line);
+}
+
+.canvas__empty::after {
+  bottom: 16px;
+  inset-inline-end: 16px;
+  border-inline-end: 1.5px solid var(--paper-line);
+  border-bottom: 1.5px solid var(--paper-line);
+}
+
 .canvas__empty.is-hidden { display: none; }
 
 /* ---------------- responsive ---------------- */
@@ -394,11 +445,15 @@ body {
   .seam__label { display: none; }
   .seam__ruler {
     width: 78%;
-    height: 1px;
-    background: repeating-linear-gradient(
-      to right,
-      var(--line) 0px, var(--line) 1px, transparent 1px, transparent 11px
-    );
+    height: 14px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Cline x1='0' y1='7' x2='40' y2='7' stroke='%23262B33' stroke-width='1'/%3E%3Cline x1='0' y1='1' x2='0' y2='13' stroke='%23262B33' stroke-width='1'/%3E%3Cline x1='10' y1='4' x2='10' y2='10' stroke='%23262B33' stroke-width='1'/%3E%3Cline x1='20' y1='4' x2='20' y2='10' stroke='%23262B33' stroke-width='1'/%3E%3Cline x1='30' y1='4' x2='30' y2='10' stroke='%23262B33' stroke-width='1'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-position: center left;
+  }
+  .seam__ruler::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Cline x1='0' y1='7' x2='40' y2='7' stroke='%23FFB238' stroke-width='1'/%3E%3Cline x1='0' y1='1' x2='0' y2='13' stroke='%23FFB238' stroke-width='1'/%3E%3Cline x1='10' y1='4' x2='10' y2='10' stroke='%23FFB238' stroke-width='1'/%3E%3Cline x1='20' y1='4' x2='20' y2='10' stroke='%23FFB238' stroke-width='1'/%3E%3Cline x1='30' y1='4' x2='30' y2='10' stroke='%23FFB238' stroke-width='1'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-position: center left;
   }
   .workbench { min-height: 400px; }
   .canvas { min-height: 400px; }
@@ -407,4 +462,5 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .msg { animation: none; }
   .composer__send { transition: none; }
+  .seam__ruler::after { animation: none; opacity: 0.85; }
 }
