@@ -11,12 +11,31 @@ const seamEl = document.getElementById('seam');
 const previewEl = document.getElementById('preview');
 const canvasEmptyEl = document.getElementById('canvasEmpty');
 const canvasHintEl = document.getElementById('canvasHint');
+const stylePickerEl = document.getElementById('stylePicker');
 
 // Full conversation history sent to the backend on every turn.
 // Each item: { role: 'user' | 'assistant', content: string }
 let history = [];
 let isSending = false;
 let conversationLocked = false;
+
+// '' means "let the agent decide" (the default). Any other value is sent
+// to the backend as preferredStyle and overrides the agent's own judgment —
+// see api/chat.js.
+let selectedStyle = '';
+
+if (stylePickerEl) {
+  stylePickerEl.addEventListener('click', (e) => {
+    const btn = e.target.closest('.style-chip');
+    if (!btn) return;
+    selectedStyle = btn.dataset.style || '';
+    stylePickerEl.querySelectorAll('.style-chip').forEach((chip) => {
+      const isActive = chip === btn;
+      chip.classList.toggle('is-active', isActive);
+      chip.setAttribute('aria-pressed', String(isActive));
+    });
+  });
+}
 
 function addMessage(role, text) {
   const wrap = document.createElement('div');
@@ -67,7 +86,7 @@ async function sendMessage(text) {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: history })
+      body: JSON.stringify({ messages: history, preferredStyle: selectedStyle })
     });
 
     if (!res.ok) throw new Error(`Server responded ${res.status}`);

@@ -104,6 +104,63 @@ body {
   box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.15);
 }
 
+/* ---------------- STYLE PICKER ---------------- */
+/* Lets the visitor override the agent's own style judgment — the dot on
+   each chip echoes that template's actual accent color so the mapping is
+   recognizable at a glance (terracotta/acid-green/muted grey). */
+
+.style-picker {
+  display: flex;
+  gap: 8px;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.style-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--ink-raised);
+  color: var(--slate);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.style-chip:hover { border-color: var(--slate-dark); color: #E7E9ED; }
+.style-chip:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+.style-chip.is-active {
+  border-color: var(--signal);
+  color: #F1F2F4;
+  background: rgba(255, 178, 56, 0.12);
+}
+
+.style-chip__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.style-chip__dot--auto { background: conic-gradient(var(--signal), #C1633F, #D6FF3F, #7A7A76, var(--signal)); }
+.style-chip__dot--warm { background: #C1633F; }
+.style-chip__dot--bold { background: #D6FF3F; }
+.style-chip__dot--minimal { background: #7A7A76; }
+.style-chip__dot--modern-corporate { background: #2F6FED; }
+.style-chip__dot--luxury { background: #C9A961; }
+.style-chip__dot--friendly { background: #FF8B6B; }
+.style-chip__dot--bold-vibrant { background: #FF3D71; }
+.style-chip__dot--editorial { background: #7A2331; }
+.style-chip__dot--playful { background: #FF5FA2; }
+.style-chip__dot--industrial { background: #F2A93B; }
+
 .chat {
   flex: 1;
   overflow-y: auto;
