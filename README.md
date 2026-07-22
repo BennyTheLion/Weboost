@@ -10,10 +10,17 @@ contact you.
 index.html       the page markup (chat panel + live preview)
 style.css        all styling — no external CSS framework
 app.js           chat logic, talks to /api/chat
-api/chat.js      the agent: gathers info, decides when to build, calls DeepSeek
-api/templates.js three hand-built page templates the agent fills with content
-api/rateLimit.js per-IP in-memory rate limiter (see Cost & abuse guardrails)
+api/chat.js        the agent: gathers info, decides when to build, calls DeepSeek
+api/_templates.js  page templates the agent fills with content
+api/_rateLimit.js  per-IP in-memory rate limiter (see Cost & abuse guardrails)
+api/_unsplash.js   fetches real photos for generated pages
 ```
+
+`_templates.js`, `_rateLimit.js`, and `_unsplash.js` are prefixed with `_`
+because Vercel's zero-config detection turns every file directly under
+`api/` into its own serverless function endpoint — the underscore prefix
+tells it to skip these (they're helper modules imported by `chat.js`, not
+routes themselves). Only `api/chat.js` is meant to be hit as `/api/chat`.
 
 Everything is plain HTML/CSS/JS — no build step, no framework — so it drops
 straight into an existing plain-JS project later.
@@ -26,12 +33,12 @@ inconsistent quality), this uses **tool calling**: the model has one tool,
 contact link, and a `style` choice of `warm` / `bold` / `minimal`). It keeps
 asking questions in plain chat until it has enough, then calls the tool
 instead of replying in prose. The backend takes those structured arguments
-and renders them into one of three hand-built templates in `api/templates.js`
+and renders them into one of the hand-built templates in `api/_templates.js`
 — the model never writes markup or CSS itself, which is what keeps output
 fast, cheap, and visually solid every time.
 
 To add a new visual style, write a new template function in
-`api/templates.js`, add it to the `TEMPLATES` map, and add its name to the
+`api/_templates.js`, add it to the `TEMPLATES` map, and add its name to the
 `style` enum in `api/chat.js`'s tool definition.
 
 ## Language & direction
@@ -51,7 +58,7 @@ Two limits protect your API bill from a runaway or abusive conversation:
 - **Turn cap** (`MAX_USER_TURNS` in `api/chat.js`, default 8): once a
   conversation passes this many user messages, the backend stops calling
   DeepSeek entirely and tells the user to refresh and start over.
-- **Rate limit** (`api/rateLimit.js`, default 30 requests / 10 min / IP):
+- **Rate limit** (`api/_rateLimit.js`, default 30 requests / 10 min / IP):
   blocks rapid-fire requests from a single visitor. This is in-memory and
   best-effort — serverless platforms may run multiple instances under real
   traffic, so it won't be a perfectly shared counter. For a hard guarantee
@@ -90,8 +97,14 @@ call is mocked):
 2. **Deploy the backend function.** The easiest path is Vercel:
    - Push this folder to a GitHub repo, import it in Vercel.
    - In the Vercel project settings, add an environment variable
-     `DEEPSEEK_API_KEY` with your key.
-   - Vercel auto-detects `api/chat.js` as a serverless function — no config needed.
+     `DEEPSEEK_API_KEY` with your key. Optionally also add
+     `UNSPLASH_ACCESS_KEY` (from unsplash.com/developers) to have generated
+     pages use real photos instead of placeholder art — page generation
+     works fine without it.
+   - Vercel auto-detects `api/chat.js` as a serverless function — no config
+     needed. (`api/_templates.js`, `api/_rateLimit.js`, and `api/_unsplash.js`
+     are prefixed with `_` so Vercel treats them as plain modules, not
+     separate function routes.)
 3. **Open `index.html`** (served by Vercel, or any static host) — the chat
    will call `/api/chat` on the same domain.
 

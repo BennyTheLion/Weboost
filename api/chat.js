@@ -13,9 +13,9 @@
 // of the placeholder panels — see unsplash.js. Fully optional: without it,
 // every photo spot just falls back to its placeholder.
 
-const { renderTemplate } = require('./templates');
-const { checkRateLimit } = require('./rateLimit');
-const { fetchPhoto, searchPhotos } = require('./unsplash');
+const { renderTemplate } = require('./_templates');
+const { checkRateLimit } = require('./_rateLimit');
+const { fetchPhoto, searchPhotos } = require('./_unsplash');
 
 const VALID_STYLES = [
   'warm',
