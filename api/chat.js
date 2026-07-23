@@ -105,7 +105,11 @@ For "process" and "faq": only state things the user actually told you or that ar
 generic (e.g. "how do I get started" -> point at the contact method). Never invent specific
 facts you don't have — no made-up prices, guarantees, certifications, or years of experience.
 If you don't have enough for a good process/faq section, ask one more short question rather
-than fabricating detail.
+than fabricating detail. The page never has an actual on-page form — the only real contact
+mechanisms are the ones in "ctaLink" (a phone call, a WhatsApp message, or an email). So the
+first "process" step must describe reaching out through that actual mechanism (e.g. "you call
+or message us on WhatsApp") — never describe it as "filling out a form" or "submitting a form"
+even if the user used that word loosely in conversation, since no such form exists on the page.
 
 For "featured": ask what 2-4 things they'd most want a visitor to see highlighted — specific
 dishes for a restaurant, specific packages/services for anything else. Ground these in what
@@ -190,7 +194,7 @@ const TOOL = {
           minItems: 3,
           maxItems: 4,
           description:
-            'Numbered steps for "how it works" — how a visitor actually becomes a customer, e.g. reach out -> we discuss your needs -> we deliver.',
+            'Numbered steps for "how it works" — how a visitor actually becomes a customer, e.g. reach out -> we discuss your needs -> we deliver. Step 1 must match the real contact mechanism in ctaLink (call/WhatsApp/email) — never describe an on-page form, since none exists.',
           items: {
             type: 'object',
             properties: {
