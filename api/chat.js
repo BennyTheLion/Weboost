@@ -13,7 +13,7 @@
 // of the placeholder panels — see unsplash.js. Fully optional: without it,
 // every photo spot just falls back to its placeholder.
 
-const { renderTemplate } = require('./_templates');
+const { renderTemplate } = require('../templates');
 const { checkRateLimit } = require('./_rateLimit');
 const { fetchPhoto, searchPhotos } = require('./_unsplash');
 
@@ -138,7 +138,7 @@ const TOOL = {
           type: 'string',
           enum: VALID_STYLES,
           description:
-            'warm = cream/serif, best for personal services & hospitality (photographers, therapists, small cafes). bold = dark/acid-green high-contrast, best for tech & agencies. minimal = editorial/hairline-rule, best for consulting & professional services. modern-corporate = navy/blue structured trust-focused, best for lawyers, accountants, finance. luxury = dark/gold/elegant serif, best for jewelry, luxury real estate, premium salons. friendly = rounded/soft-colored/approachable, best for healthcare, education, childcare. bold-vibrant = bright multi-color/high-energy/neo-brutalist, best for startups, gyms, marketing agencies. editorial = magazine-style/storytelling/serif, best for personal brands, writers, photographers. playful = illustrated/rotated-stickers/multi-hue, best for kids, entertainment, creative businesses. industrial = strong sharp-cornered typography/steel-amber, best for construction, manufacturing, trades.'
+            'warm = cream/serif, best for personal services & hospitality (photographers, therapists, small cafes). bold = light cobalt-blue/concrete print-poster with a sunflower-yellow accent, high-contrast, best for tech & agencies. minimal = editorial/hairline-rule, best for consulting & professional services. modern-corporate = navy/blue structured trust-focused, best for lawyers, accountants, finance. luxury = dark/gold/elegant serif, best for jewelry, luxury real estate, premium salons. friendly = rounded/soft-colored/approachable, best for healthcare, education, childcare. bold-vibrant = bright multi-color/high-energy/neo-brutalist, best for startups, gyms, marketing agencies. editorial = magazine-style/storytelling/serif, best for personal brands, writers, photographers. playful = illustrated/rotated-stickers/multi-hue, best for kids, entertainment, creative businesses. industrial = strong sharp-cornered typography/steel-amber, best for construction, manufacturing, trades.'
         },
         conversionGoal: {
           type: 'string',
@@ -455,7 +455,11 @@ module.exports = async function handler(req, res) {
       reply:
         message.content ||
         `הנה דף הנחיתה שלכם — בסגנון ${content.style} שנבנה סביב "${content.headline}". ספרו לי אם תרצו לשנות משהו.`,
-      page_html: pageHtml
+      page_html: pageHtml,
+      // Sent so the frontend can cache it and instantly re-render in a
+      // different visual style client-side (via templates.js) without
+      // another round trip through this endpoint or DeepSeek.
+      content
     });
   } catch (err) {
     res.status(500).json({ error: `Server error: ${err.message}` });

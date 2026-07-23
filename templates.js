@@ -3420,4 +3420,13 @@ function renderTemplate(style, content) {
   return fn(content);
 }
 
-module.exports = { renderTemplate, TEMPLATES };
+// Loaded two ways: `require()`d server-side by api/chat.js (CommonJS), and
+// included via a plain <script> tag client-side (app.js) so the browser can
+// re-render a cached content object in a different style instantly, without
+// a round trip to the backend or another DeepSeek call.
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { renderTemplate, TEMPLATES };
+}
+if (typeof window !== 'undefined') {
+  window.WeboostTemplates = { renderTemplate, TEMPLATES };
+}

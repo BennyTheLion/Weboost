@@ -10,17 +10,21 @@ contact you.
 index.html       the page markup (chat panel + live preview)
 style.css        all styling — no external CSS framework
 app.js           chat logic, talks to /api/chat
+templates.js     page templates — shared by the backend (require) and the
+                 browser (<script> tag), so a visitor can flip styles
+                 instantly client-side, see "Instant style switching" below
 api/chat.js        the agent: gathers info, decides when to build, calls DeepSeek
-api/_templates.js  page templates the agent fills with content
 api/_rateLimit.js  per-IP in-memory rate limiter (see Cost & abuse guardrails)
 api/_unsplash.js   fetches real photos for generated pages
 ```
 
-`_templates.js`, `_rateLimit.js`, and `_unsplash.js` are prefixed with `_`
-because Vercel's zero-config detection turns every file directly under
-`api/` into its own serverless function endpoint — the underscore prefix
-tells it to skip these (they're helper modules imported by `chat.js`, not
-routes themselves). Only `api/chat.js` is meant to be hit as `/api/chat`.
+`_rateLimit.js` and `_unsplash.js` are prefixed with `_` because Vercel's
+zero-config detection turns every file directly under `api/` into its own
+serverless function endpoint — the underscore prefix tells it to skip these
+(they're helper modules imported by `chat.js`, not routes themselves). Only
+`api/chat.js` is meant to be hit as `/api/chat`. `templates.js` lives at the
+project root instead, alongside `index.html`/`app.js`, since it needs to be
+fetchable as a plain static file for the browser to use it too.
 
 Everything is plain HTML/CSS/JS — no build step, no framework — so it drops
 straight into an existing plain-JS project later.
@@ -30,16 +34,29 @@ straight into an existing plain-JS project later.
 Rather than asking the model to freehand a whole HTML page (unreliable, slow,
 inconsistent quality), this uses **tool calling**: the model has one tool,
 `generate_landing_page`, with a strict schema (headline, value props, CTA,
-contact link, and a `style` choice of `warm` / `bold` / `minimal`). It keeps
-asking questions in plain chat until it has enough, then calls the tool
-instead of replying in prose. The backend takes those structured arguments
-and renders them into one of the hand-built templates in `api/_templates.js`
-— the model never writes markup or CSS itself, which is what keeps output
-fast, cheap, and visually solid every time.
+contact link, and a `style` choice — 10 visual styles, see `VALID_STYLES` in
+`api/chat.js`). It keeps asking questions in plain chat until it has enough,
+then calls the tool instead of replying in prose. The backend takes those
+structured arguments and renders them into one of the hand-built templates in
+`templates.js` — the model never writes markup or CSS itself, which is what
+keeps output fast, cheap, and visually solid every time.
 
-To add a new visual style, write a new template function in
-`api/_templates.js`, add it to the `TEMPLATES` map, and add its name to the
-`style` enum in `api/chat.js`'s tool definition.
+To add a new visual style, write a new template function in `templates.js`,
+add it to the `TEMPLATES` map, and add its name to the `style` enum in
+`api/chat.js`'s tool definition.
+
+### Instant style switching
+
+The style chips above the chat (`אוטומטי` / `חם` / `נועז` / ...) don't just
+set a preference for the *next* generation — once a page exists, clicking one
+instantly re-renders the live preview in that style, entirely client-side.
+This works because `api/chat.js` returns the raw structured `content` object
+(not just the rendered HTML) alongside every generated page; `app.js` caches
+it, and `templates.js` — loaded as a plain `<script>` tag, no bundler needed
+— calls the exact same `renderTemplate(style, content)` function in the
+browser that the backend used server-side. No extra network round trip, no
+extra DeepSeek call, no cost — switching styles is just re-running a pure
+function over data already sitting in memory.
 
 ## Language & direction
 
@@ -102,9 +119,10 @@ call is mocked):
      pages use real photos instead of placeholder art — page generation
      works fine without it.
    - Vercel auto-detects `api/chat.js` as a serverless function — no config
-     needed. (`api/_templates.js`, `api/_rateLimit.js`, and `api/_unsplash.js`
-     are prefixed with `_` so Vercel treats them as plain modules, not
-     separate function routes.)
+     needed. (`api/_rateLimit.js` and `api/_unsplash.js` are prefixed with
+     `_` so Vercel treats them as plain modules, not separate function
+     routes; `templates.js` lives outside `api/` entirely and is served as
+     a static file, same as `app.js`.)
 3. **Open `index.html`** (served by Vercel, or any static host) — the chat
    will call `/api/chat` on the same domain.
 
@@ -122,8 +140,11 @@ Since there's no build step, merging is just file copying:
 - Copy `style.css` rules in — they're all scoped under `.workshop`, `.workbench`,
   `.canvas`, `.seam` class names, so they shouldn't collide with existing styles
   unless you already use those class names.
-- Copy `app.js` as-is; it only touches elements with the specific IDs used here.
-- Copy `api/chat.js` into your existing backend's routing setup.
+- Copy `app.js` and `templates.js` as-is; `app.js` only touches elements
+  with the specific IDs used here, and `templates.js` is loaded as a plain
+  `<script>` tag before it (needed for instant client-side style switching).
+- Copy `api/chat.js` into your existing backend's routing setup, and update
+  its `require('../templates')` path to wherever `templates.js` ends up.
 
 ## Customizing the agent's behavior
 

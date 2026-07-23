@@ -24,6 +24,12 @@ let conversationLocked = false;
 // see api/chat.js.
 let selectedStyle = '';
 
+// The structured content object from the most recent generate_landing_page
+// call (see api/chat.js), cached so the style chips can instantly re-render
+// the preview in a different visual style entirely client-side (via
+// templates.js) — no backend round trip, no extra DeepSeek call.
+let lastContent = null;
+
 if (stylePickerEl) {
   stylePickerEl.addEventListener('click', (e) => {
     const btn = e.target.closest('.style-chip');
@@ -34,6 +40,15 @@ if (stylePickerEl) {
       chip.classList.toggle('is-active', isActive);
       chip.setAttribute('aria-pressed', String(isActive));
     });
+
+    // A page already exists — re-render it in the new style right now
+    // instead of waiting for the next chat turn. "אוטומטי" has no fixed
+    // style of its own, so it does nothing here beyond setting the
+    // preference for the agent's *next* generation.
+    if (lastContent && selectedStyle) {
+      lastContent.style = selectedStyle;
+      renderPreview(window.WeboostTemplates.renderTemplate(selectedStyle, lastContent));
+    }
   });
 }
 
@@ -63,6 +78,15 @@ function addThinking() {
 
 function setBuilding(active) {
   seamEl.classList.toggle('is-active', active);
+}
+
+function setActiveStyleChip(style) {
+  if (!stylePickerEl) return;
+  stylePickerEl.querySelectorAll('.style-chip').forEach((chip) => {
+    const isActive = (chip.dataset.style || '') === style;
+    chip.classList.toggle('is-active', isActive);
+    chip.setAttribute('aria-pressed', String(isActive));
+  });
 }
 
 function renderPreview(html) {
@@ -98,6 +122,8 @@ async function sendMessage(text) {
 
     if (data.page_html) {
       renderPreview(data.page_html);
+      lastContent = data.content || null;
+      if (lastContent?.style) setActiveStyleChip(lastContent.style);
     }
 
     if (data.limit_reached) {
