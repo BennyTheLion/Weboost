@@ -276,6 +276,10 @@ function warmTemplate(c) {
   .hero__scrim{position:absolute;inset:0;}
   .hero--photo .hero__scrim{background:linear-gradient(180deg,rgba(23,15,10,.35) 0%,rgba(34,24,18,.88) 100%);}
   .hero--fallback .hero__scrim{background:radial-gradient(500px 320px at 50% 15%,rgba(200,155,60,.14),transparent 65%);}
+  .hero--photo{animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  .hero--fallback .hero__scrim{animation:heroBreathe 6s ease-in-out infinite alternate;}
+  @keyframes heroKenBurns{from{background-size:112% auto;}to{background-size:128% auto;}}
+  @keyframes heroBreathe{from{opacity:.85;}to{opacity:1;}}
   .hero__inner{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:60px 20px;}
   /* wax-seal badge: a bordered chip with a small brass ring, rather than
      a frosted-glass pill — the "seal" idea reused everywhere .badge
@@ -539,6 +543,24 @@ function warmTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
@@ -630,6 +652,10 @@ function boldTemplate(c) {
   .hero__scrim{position:absolute;inset:0;}
   .hero--photo .hero__scrim{background:linear-gradient(160deg,rgba(30,63,214,.82) 0%,rgba(20,44,158,.9) 100%);mix-blend-mode:multiply;}
   .hero--fallback .hero__scrim{background:radial-gradient(560px 380px at 85% 0%,rgba(255,201,64,.18),transparent 60%);}
+  .hero--photo{animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  .hero--fallback .hero__scrim{animation:heroBreathe 6s ease-in-out infinite alternate;}
+  @keyframes heroKenBurns{from{background-size:112% auto;}to{background-size:128% auto;}}
+  @keyframes heroBreathe{from{opacity:.85;}to{opacity:1;}}
   .hero__inner{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:60px 20px;}
   .badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.4);border-radius:var(--radius);padding:7px 16px 7px 14px;font-family:'Rubik Mono One',monospace;font-size:10px;font-weight:400;letter-spacing:.04em;text-transform:uppercase;color:#fff;margin-bottom:24px;}
   .badge__dot{width:6px;height:6px;border-radius:50%;background:var(--sun);}
@@ -891,6 +917,24 @@ function boldTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
@@ -961,7 +1005,8 @@ function minimalTemplate(c) {
      gradient — the flatness is the point). Fallback keeps the page's own
      paper tone, framed by a double hairline like a masthead. --- */
   .hero{position:relative;overflow:hidden;}
-  .hero__photo-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:grayscale(1) contrast(1.05);}
+  .hero__photo-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:grayscale(1) contrast(1.05);animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  @keyframes heroKenBurns{from{background-size:112% auto;}to{background-size:128% auto;}}
   .hero__wash{position:absolute;inset:0;background:rgba(26,26,26,.58);}
   .hero__inner{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:72px 24px 64px;}
   .hero--photo h1,.hero--photo .eyebrow{color:var(--bg);}
@@ -1210,6 +1255,24 @@ function minimalTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
@@ -1274,6 +1337,10 @@ function modernCorporateTemplate(c) {
   .hero__scrim{position:absolute;inset:0;}
   .hero--photo .hero__scrim{background:linear-gradient(90deg,rgba(8,32,56,.88) 0%,rgba(8,32,56,.5) 60%,rgba(8,32,56,.25) 100%);}
   .hero--fallback .hero__scrim{background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 1px,transparent 1px,transparent 64px);}
+  .hero--photo{animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  .hero--fallback .hero__scrim{animation:heroDrift 16s linear infinite alternate;}
+  @keyframes heroKenBurns{from{background-size:112% auto;}to{background-size:128% auto;}}
+  @keyframes heroDrift{from{background-position:0 0;}to{background-position:64px 0;}}
   .hero__inner{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:60px 20px;width:100%;}
   .hero__content{max-width:600px;}
   .badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:6px 12px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:20px;}
@@ -1522,6 +1589,24 @@ function modernCorporateTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
@@ -1585,6 +1670,10 @@ function luxuryTemplate(c) {
   .hero--fallback{background:var(--onyx);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
   .hero__scrim{position:absolute;inset:0;}
   .hero--photo .hero__scrim{background:linear-gradient(180deg,rgba(14,14,16,.35) 0%,rgba(14,14,16,.75) 100%);}
+  .hero--photo{animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  .hero--fallback .hero__scrim{background:radial-gradient(600px 360px at 50% 20%,rgba(201,169,97,.12),transparent 70%);animation:heroBreathe 6s ease-in-out infinite alternate;}
+  @keyframes heroKenBurns{from{background-size:112% auto;}to{background-size:128% auto;}}
+  @keyframes heroBreathe{from{opacity:.7;}to{opacity:1;}}
   .hero__inner{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:80px 24px;}
   .badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--gold);}
   h1{font-family:'Miriam Libre',serif;font-size:clamp(30px,6.5vw,50px);font-weight:400;line-height:1.25;margin-bottom:22px;color:var(--cream);}
@@ -1827,6 +1916,24 @@ function luxuryTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
@@ -1890,8 +1997,12 @@ function friendlyTemplate(c) {
   .hero__scrim{position:absolute;inset:0;}
   .hero--photo .hero__scrim{background:rgba(242,107,77,.28);}
   .hero--fallback .hero__scrim::before,.hero--fallback .hero__scrim::after{content:"";position:absolute;border-radius:50%;}
-  .hero--fallback .hero__scrim::before{width:280px;height:280px;background:rgba(255,139,107,.18);top:-60px;inset-inline-end:-60px;}
-  .hero--fallback .hero__scrim::after{width:220px;height:220px;background:rgba(143,211,232,.22);bottom:-40px;inset-inline-start:-40px;}
+  .hero--fallback .hero__scrim::before{width:280px;height:280px;background:rgba(255,139,107,.18);top:-60px;inset-inline-end:-60px;animation:heroFloat1 9s ease-in-out infinite alternate;}
+  .hero--fallback .hero__scrim::after{width:220px;height:220px;background:rgba(143,211,232,.22);bottom:-40px;inset-inline-start:-40px;animation:heroFloat2 11s ease-in-out infinite alternate;}
+  .hero--photo{animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  @keyframes heroKenBurns{from{background-size:112% auto;}to{background-size:128% auto;}}
+  @keyframes heroFloat1{from{transform:translate(0,0);}to{transform:translate(-16px,14px);}}
+  @keyframes heroFloat2{from{transform:translate(0,0);}to{transform:translate(14px,-12px);}}
   .hero__inner{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:56px 20px;}
   .badge{display:inline-flex;align-items:center;gap:7px;background:#fff;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;color:var(--coral-deep);margin-bottom:20px;box-shadow:0 6px 16px -8px rgba(58,46,42,.2);transform:rotate(-2deg);}
   .badge__dot{width:7px;height:7px;border-radius:50%;background:#3FAE5C;}
@@ -2142,6 +2253,24 @@ function friendlyTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
@@ -2207,7 +2336,10 @@ function boldVibrantTemplate(c) {
   .hero--fallback{background:var(--indigo);}
   .hero__scrim{position:absolute;inset:0;}
   .hero--photo .hero__scrim{background:linear-gradient(135deg,rgba(91,33,182,.7) 0%,rgba(255,61,113,.55) 100%);}
-  .hero--fallback .hero__scrim{background:linear-gradient(135deg,var(--indigo) 0%,var(--magenta) 100%);clip-path:polygon(0 0,100% 0,100% 82%,0 100%);}
+  .hero--fallback .hero__scrim{background:linear-gradient(135deg,var(--indigo) 0%,var(--magenta) 100%);clip-path:polygon(0 0,100% 0,100% 82%,0 100%);animation:heroHueDrift 10s ease-in-out infinite alternate;}
+  .hero--photo{animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  @keyframes heroKenBurns{from{background-size:112% auto;}to{background-size:128% auto;}}
+  @keyframes heroHueDrift{from{filter:hue-rotate(0deg);}to{filter:hue-rotate(10deg);}}
   .hero__inner{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:64px 20px;}
   .badge{display:inline-flex;align-items:center;gap:7px;background:var(--amber);border:2px solid var(--ink);border-radius:999px;padding:7px 16px;font-size:12px;font-weight:800;color:var(--ink);margin-bottom:22px;}
   .badge__dot{width:7px;height:7px;border-radius:50%;background:var(--ink);}
@@ -2459,6 +2591,24 @@ function boldVibrantTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
@@ -2522,7 +2672,9 @@ function editorialTemplate(c) {
     .nav-desktop a:hover{color:var(--burgundy);}
   }
   .hero{max-width:900px;margin:0 auto;padding:44px 20px 20px;text-align:center;}
-  .hero-photo{aspect-ratio:16/9;margin-bottom:36px;}
+  .hero-photo{aspect-ratio:16/9;margin-bottom:36px;overflow:hidden;}
+  .hero-photo.photo-real img{animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  @keyframes heroKenBurns{from{transform:scale(1.08);}to{transform:scale(1.22);}}
   h1{font-family:'Tinos',serif;font-weight:700;font-size:clamp(30px,6vw,50px);line-height:1.18;margin-bottom:18px;}
   .sub{font-size:18px;color:var(--muted);font-style:italic;max-width:56ch;margin:0 auto 28px;}
   .hero__ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
@@ -2751,6 +2903,24 @@ function editorialTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
@@ -2780,7 +2950,10 @@ function playfulTemplate(c) {
   .eyebrow{font-family:'Heebo',sans-serif;font-weight:700;font-size:12px;letter-spacing:.03em;color:var(--pink);text-transform:uppercase;margin-bottom:10px;}
   .section-title{font-family:'Suez One',sans-serif;font-size:clamp(24px,4vw,32px);margin-bottom:8px;}
   .section-head{text-align:center;max-width:560px;margin:0 auto 8px;}
-  .blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.5;z-index:0;pointer-events:none;}
+  .blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.5;z-index:0;pointer-events:none;animation:heroBlobFloat 8s ease-in-out infinite alternate;}
+  .blob:nth-child(2){animation-duration:10s;animation-delay:-2s;}
+  .blob:nth-child(3){animation-duration:7s;animation-delay:-4s;}
+  @keyframes heroBlobFloat{from{transform:translate(0,0) scale(1);}to{transform:translate(10px,-14px) scale(1.06);}}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;padding:14px 28px;transition:transform .15s ease;white-space:nowrap;position:relative;z-index:1;}
   .btn svg{width:16px;height:16px;}
   .btn--primary{background:var(--pink);color:#fff;box-shadow:0 6px 0 #C93E7E;}
@@ -2821,6 +2994,8 @@ function playfulTemplate(c) {
   .hero--fallback{background:var(--purple);}
   .hero__scrim{position:absolute;inset:0;z-index:0;}
   .hero--photo .hero__scrim{background:linear-gradient(180deg,rgba(140,84,255,.55) 0%,rgba(255,95,162,.55) 100%);}
+  .hero--photo{animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  @keyframes heroKenBurns{from{background-size:112% auto;}to{background-size:128% auto;}}
   .hero--fallback .hero__scrim .blob{position:absolute;}
   .hero__inner{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:60px 20px;}
   .badge{display:inline-flex;align-items:center;gap:7px;background:var(--yellow);border:3px solid var(--ink);border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:22px;transform:rotate(-2deg);}
@@ -3082,6 +3257,24 @@ function playfulTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
@@ -3150,6 +3343,10 @@ function industrialTemplate(c) {
   .hero__scrim{position:absolute;inset:0;}
   .hero--photo .hero__scrim{background:linear-gradient(0deg,rgba(26,29,31,.88) 10%,rgba(26,29,31,.35) 60%,rgba(26,29,31,.1) 100%);}
   .hero--fallback .hero__scrim{background:linear-gradient(0deg,rgba(26,29,31,.7) 0%,rgba(26,29,31,.2) 100%);}
+  .hero--photo{animation:heroKenBurns 20s ease-in-out infinite alternate;}
+  .hero--fallback .hero__scrim{animation:heroBreathe 6s ease-in-out infinite alternate;}
+  @keyframes heroKenBurns{from{background-size:112% auto;}to{background-size:128% auto;}}
+  @keyframes heroBreathe{from{opacity:.85;}to{opacity:1;}}
   .hero__inner{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:80px 20px 48px;width:100%;}
   .badge{display:inline-flex;align-items:center;gap:8px;background:var(--amber);border-radius:0;padding:7px 16px;font-size:12px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.05em;margin-bottom:22px;}
   .badge__dot{width:7px;height:7px;background:var(--ink);}
@@ -3399,6 +3596,24 @@ function industrialTemplate(c) {
       </div>
     </div>
   </footer>
+  <script>
+    // Inside an iframe[srcdoc] (how the builder previews this page), a bare
+    // "#id" href resolves against the PARENT page's URL, not this document
+    // — so a native click navigates the whole iframe away instead of
+    // scrolling here. Intercept and scroll manually so in-page nav works
+    // both in that preview and once the page is deployed on its own.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      a.blur();
+    });
+  </script>
 </body></html>`;
 }
 
